@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "ProductView";
+}
+
+<h2>ProductView</h2>
+
+<a href="/home/addproduct">Add Product</a>
+<br>
+<a href="/catagory/createcatagory">Add Catagory</a>
+<br>
+<a href="/catagory/CatagoryView">See All Catagory</a>
+<br>
+<table class="table table-bordered">
+    <tr>
+        <td>Name</td>
+        <td>Product Id</td>
+        <td>Catagory Name</td>
+    </tr>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.Name</td>
+            <td>@c.Id</td>
+            <td>@c.Catagory.Name</td>
+            <td><a href="/home/details?id=@c.Id">Details</a></td>
+            <td><a href="/home/edit?id=@c.Id">Edit</a></td>
+            <td><a href="/home/delete?id=@c.Id" onclick="return confirm('are you sure?')">Delete</a></td>
+
+
+        </tr>
+    }
+
+</table>

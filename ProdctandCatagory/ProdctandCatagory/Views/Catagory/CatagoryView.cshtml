@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "CatagoryView";
+}
+
+<h2>CatagoryView</h2>
+
+<a href="/home/addproduct">Add Product</a>
+<br>
+<a href="/catagory/createcatagory">Add Catagory</a>
+<br>
+<table class="table table-bordered">
+    <tr>
+        <td>Name</td>
+        <td>Catagory Id</td>
+    </tr>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.Name</td>
+            <td>@c.Id</td>
+            <td><a href="/catagory/details?id=@c.Id">Details</a></td>
+            <td><a href="/catagory/edit?id=@c.Id">Edit</a></td>
+            <td><a href="/catagory/delete?id=@c.Id" onclick="return confirm('are you sure?')">Delete</a></td>
+
+
+        </tr>
+    }
+
+</table>
