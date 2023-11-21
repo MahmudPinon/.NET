@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Index</h2>
+<table class="table table-bordered">
+    <tr>
+        <td>Product Id</td>
+        <td>Product Name</td>
+        <td>Quantity</td>
+        <td>Price</td>
+        <td>Product Catagory</td>
+    </tr>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.Id</td>
+            <td>@c.Name</td>
+            <td>@c.Quantity</td>
+            <td>@c.Price</td>
+            <td>@c.Catagory.Name</td>
+            <td><a href="/home/details?id=@c.Id">Details</a></td>
+            <td><a href="/home/edit?id=@c.Id">Edit</a></td>
+            <td><a href="/home/delete?id=@c.Id" onclick="return confirm('are you sure?')">Delete</a></td>
+
+
+        </tr>
+    }
+
+</table>

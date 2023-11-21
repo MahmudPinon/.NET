@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "BuyProduct";
+    Layout = "~/Views/Shared/_InnerCustomerLayout.cshtml";
+}
+
+<h2>BuyProduct</h2>
+
+@using (Html.BeginForm("BuyProduct", "Customer", FormMethod.Post))
+{
+    <table class="table table-bordered">
+        <!-- ... your table headers ... -->
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.Catagory.Name</td>
+                <td>
+                    <input type="hidden" name="selectedProducts[@product.Id].Quantity" value="0" />
+                    <select name="selectedProducts[@product.Id].Quantity">
+                        @for (var i = 0; i <= (int)product.Quantity; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <input type="hidden" name="selectedProducts[@product.Id].IsSelected" value="false" />
+                    <input type="checkbox" name="selectedProducts[@product.Id].IsSelected" value="false" />
+                </td>
+            </tr>
+        }
+    </table>
+
+    <input type="submit" value="Add to Cart" />
+}
