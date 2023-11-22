@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "DistributionRequests";
+    Layout = "~/Views/Shared/_InnerRestaurant.cshtml";
+}
+@model List<ZeroHunger.DTOs.DistributionDTO>
+
+<h2>DistributionRequests</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <p>@ViewBag.Message</p>
+    <p>@ViewBag.Id</p>
+}
+else
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Collction ID</th>
+                <th>Distributed Location</th>
+                <th>Food Name</th>
+                <th>Quantity</th>
+                <th>Distribution Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                for (var i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.DistributedLocation</td>
+                            <td>@item.FoodName</td>
+                            <td>@item.Quantity</td>
+                            <td>
+                                <input type="time" class="store-time" value="storeTime[@i]?.ToString(" HH:mm")" name="storeTime[@i]" placeholder="Enter Distribution Time Time" />
+                            </td>
+                            <td>
+                                <input type="hidden" class="row-fooodname" name="selectedItems[@i].FoodName" value="@item.FoodName" />
+                                <input type="hidden" class="row-employeeId" name="selectedItems[@i].employeeId" value="@item.EmployeeId" />
+                                <input type="hidden" class="row-quantity" name="selectedItems[@i].Quantity" value="@item.Quantity" />
+                                <input type="hidden" class="row-id" name="SelectedRow" value="@item.Id" />
+
+                                <button class="submit-row">Submit</button>
+                            </td>
+                        </tr>
+                    
+                }
+            }
+
+        </tbody>
+    </table>
+    // }
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.submit-row').click(function () {
+            var row = $(this).closest('tr');
+            var DistributedTime = row.find('.store-time').val();
+            var id = row.find('.row-id').val();
+
+            var rowData = {
+                DistributedTime: DistributedTime,
+                Id: id
+            };
+
+            $.ajax({
+                url: '@Url.Action("DistributionRequests", "Employee")',
+                method: 'POST',
+                data: rowData,
+                success: function (response) {
+                    location.reload();
+                    console.log('Data submitted for row ID: ' + id);
+                },
+                error: function (error) {
+                    console.error('Error submitting data: ' + error);
+                }
+            });
+        });
+    });
+</script>

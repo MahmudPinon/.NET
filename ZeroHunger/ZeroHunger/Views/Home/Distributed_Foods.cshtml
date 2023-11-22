@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Distributed_Foods";
+    Layout = "~/Views/Shared/_InnerRestaurant.cshtml";
+}
+
+<h2>Distributed_Foods</h2>
+
+@model List<ZeroHunger.DTOs.DistributionDTO>
+
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>CollectionId</th>
+            <th>DistributedLocation</th>
+            <th>Date</th>
+            <th>DistributedTime</th>
+            <th>FoodName</th>
+            <th>Quantity</th>
+            <th>EmployeeId</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var distribution in Model)
+        {
+            <tr>
+                <td>@distribution.Id</td>
+                <td>@distribution.CollectionId</td>
+                <td>@distribution.DistributedLocation</td>
+                <td>@distribution.Date</td>
+                <td>@distribution.DistributedTime</td>
+                <td>@distribution.FoodName</td>
+                <td>@distribution.Quantity</td>
+                <td>@distribution.EmployeeId</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "SubmitCollectedFood";
+    Layout = "~/Views/Shared/_RestaurantRegistrationLayout.cshtml";
+}
+
+@model ZeroHunger.DTOs.CompositeDTO2
+
+<h2>SubmitCollectedFood</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <p>@ViewBag.Message</p>
+    <p>@ViewBag.Id</p>
+}
+else
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+    //using (Html.BeginForm("SubmitCollectedFood", "Employee", FormMethod.Post))
+    //{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Food Name</th>
+                    <th>Quantity</th>
+                    <th>Store Time</th>
+                    <th>Expire Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    for (var i = 0; i < Model.CollectionRequests.Count; i++)
+                    {
+                        var item = Model.CollectionRequests[i];
+                        if ((item.employeeId == ViewBag.Id && item.Status == "Collected" && !Model.CollectedItems.Any(collected => collected.ReqId == item.Id)))
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.FoodName</td>
+                                <td>@item.Quantity</td>
+                                <td>
+                                    <input type="time" class="store-time" value="storeTime[@i]?.ToString("HH:mm")"  name="storeTime[@i]" placeholder="Enter Store Time" />
+                                </td>
+                                <td>
+                                    <input type="time" class="expire-time" value="expireTime[@i]?.ToString("HH:mm")" name="expireTime[@i]" placeholder="Enter Expire Time" />
+                                </td>
+                                <td>
+                                    <input type="hidden" class="row-fooodname" name="selectedItems[@i].FoodName" value="@item.FoodName" />
+                                    <input type="hidden" class="row-employeeId" name="selectedItems[@i].employeeId" value="@item.employeeId" />
+                                    <input type="hidden" class="row-quantity" name="selectedItems[@i].Quantity" value="@item.Quantity" />
+                                    <input type="hidden" class="row-id" name="SelectedRow" value="@item.Id"/>
+
+                                    <button class="submit-row">Submit</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+   // }
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.submit-row').click(function () {
+            var row = $(this).closest('tr');
+            var StoreTime = row.find('.store-time').val();
+            var ExpireTime = row.find('.expire-time').val();
+            var FoodName = row.find('.row-fooodname').val();
+            var EmployeeId = row.find('.row-employeeId').val();
+            var Quantity = row.find('.row-quantity').val();
+            var id = row.find('.row-id').val();
+
+            var rowData = {
+                StoreTime: StoreTime,
+                ExpireTime: ExpireTime,
+                FoodName: FoodName,
+                EmployeeId: EmployeeId,
+                Quantity: Quantity,
+                ReqId: id
+            };
+
+            $.ajax({
+                url: '@Url.Action("SubmitCollectedFood", "Employee")',
+                method: 'POST',
+                data: rowData,
+                success: function (response) {
+                    location.reload();
+                    console.log('Data submitted for row ID: ' + id);
+                },
+                error: function (error) {
+                    console.error('Error submitting data: ' + error);
+                }
+            });
+        });
+    });
+</script>

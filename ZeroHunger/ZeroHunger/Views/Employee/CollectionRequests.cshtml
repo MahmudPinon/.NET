@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "CollectionRequests";
+    Layout = "~/Views/Shared/_RestaurantRegistrationLayout.cshtml";
+}
+
+@model List<ZeroHunger.DTOs.CollectionRequestDTO>
+
+<h2>Collection Requests</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <p>@ViewBag.Message</p>
+}
+else
+{
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Restaurant Id</th>
+                <th>Food Name</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Max Preservation Time</th>
+                <th>Collect Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+
+                    <tr>
+                        <td>@Model[i].Id</td>
+                        <td>@Model[i].RestaurantId</td>
+                        <td>@Model[i].FoodName</td>
+                        <td>@Model[i].Quantity</td>
+                        <td>@Model[i].Status</td>
+                        <td>@Model[i].Date</td>
+                        <td>@Model[i].MaxPreservationTime</td>
+                        <td>
+                            <input type="time" class="collect-time" value="@Model[i].CollectTime?.ToString("HH:mm")" />
+                            <input type="hidden" class="row-id" value="@Model[i].Id" />
+                        </td>
+                        <td>
+                            <button class="submit-row">Submit</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.submit-row').click(function () {
+            var row = $(this).closest('tr');
+            var collectTime = row.find('.collect-time').val();
+            var id = row.find('.row-id').val();
+
+            var rowData = {
+                CollectTime: collectTime,
+                Id: id
+            };
+
+            $.ajax({
+                url: '@Url.Action("CollectionRequests", "Employee")', 
+                method: 'POST',
+                data: rowData,
+                success: function (response) {
+                    location.reload();
+                    console.log('Data submitted for row ID: ' + id);
+                },
+                error: function (error) {
+                    console.error('Error submitting data: ' + error);
+                }
+            });
+        });
+    });
+</script>
